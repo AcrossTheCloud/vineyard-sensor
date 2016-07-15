@@ -1,4 +1,4 @@
-﻿-- PostgreSQL/PostGIS Schema for cognicity-flood sensor
+﻿-- PostgreSQL/PostGIS Schema for vineyard sensors
 
 -- Store data about each sensor
 CREATE TABLE sensor_metadata(
@@ -22,30 +22,27 @@ id bigserial NOT NULL,
 sensor_id integer NOT NULL,
 measurement_time timestamp with time zone NOT NULL,
 database_time timestamp with time zone DEFAULT now(),
-distance float NOT NULL,
-temperature float,
-humidity float,
+soil_moisture float,
+sap_flow float,
 CONSTRAINT sensor_data_pkey PRIMARY KEY (id)
 );
 COMMENT ON TABLE sensor_data IS 'Measurements from individual sensors';
 COMMENT ON COLUMN sensor_data.id IS '{integer} [Primary Key] Unique key for each sensor';
 COMMENT ON COLUMN sensor_data.measurement_time IS '{timestamp with timezone} Time of measurement as recorded by sensor';
 COMMENT ON COLUMN sensor_data.database_time IS '{timestamp with timezone} Time measurement data entered into database';
-COMMENT ON COLUMN sensor_data.distance IS '{float} Range between sensor and top of water (cm)';
-COMMENT ON COLUMN sensor_data.temperature IS '{float} Temperature at sensor at time of measurement, if available ';
-COMMENT ON COLUMN sensor_data.humidity IS '{float} Humidity at sensor at time of measurement , if available';
+COMMENT ON COLUMN sensor_data.soil_moisture IS '{float} soil moisture measurement';
+COMMENT ON COLUMN sensor_data.sap_flow IS '{float} sap flow measurement';
+
 
 -- Create types for floodsensor data output
 CREATE TYPE sensor_data_type AS (
   measurement_time timestamp,
   distance double precision,
-  computed_depth double precision,
-  temperature double precision,
-  humidity double precision
+  soil_moisture double precision,
+  sap_flow double precision
 );
 
 CREATE TYPE sensor_metadata_type AS (
 	id varchar,
-	height_above_riverbed real,
 	measurements json
 );
